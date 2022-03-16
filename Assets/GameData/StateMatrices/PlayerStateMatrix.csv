@@ -1,0 +1,9 @@
+,Regular,Attack,Stun,Block,Roll,Aiming,Usage,Fall
+Regular,F,A,A,A,A,A,A,A
+Attack,A,F,A,F,F,F,F,A
+Stun,A,F,F,F,F,F,F,A
+Block,A,F,A,F,F,A,F,A
+Roll,A,F,A,F,F,F,F,F
+Aiming,A,A,A,A,A,F,A,A
+Usage,A,F,A,F,F,F,F,F
+Fall,A,F,F,F,F,F,F,F
