@@ -44,6 +44,8 @@ namespace Model.Controls
             _timer.Restart();
         }
 
+        public void InterruptBuffering() => _timer.Stop();
+
         private void CheckAvialability(float irrelevant)
         {
             if (!PerformAllowed)

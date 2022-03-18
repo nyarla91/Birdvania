@@ -62,6 +62,15 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RightStickAim"",
+                    ""type"": ""Value"",
+                    ""id"": ""8a4b2ace-8f19-4b75-a90e-fdafc06c8f75"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -156,7 +165,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""90b9d604-b717-48e6-9cd9-35b81fbf3e9f"",
-                    ""path"": ""<Keyboard>/alt"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -169,7 +178,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""id"": ""7d93f06a-b2e4-4bd0-82e2-6cc323e78b22"",
                     ""path"": ""<Gamepad>/rightStick/left"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""AxisDeadzone"",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Aim"",
                     ""isComposite"": false,
@@ -180,7 +189,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""id"": ""a64f3aa1-7bc3-45e6-8bca-daf3caca6994"",
                     ""path"": ""<Gamepad>/rightStick/right"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""AxisDeadzone"",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Aim"",
                     ""isComposite"": false,
@@ -191,7 +200,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""id"": ""e0081d39-d117-41d3-89f5-1efb1b452642"",
                     ""path"": ""<Gamepad>/rightStick/up"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""AxisDeadzone"",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Aim"",
                     ""isComposite"": false,
@@ -202,7 +211,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""id"": ""b9d6afd5-06f0-46d1-8a50-9a6117260e17"",
                     ""path"": ""<Gamepad>/rightStick/down"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""AxisDeadzone"",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Aim"",
                     ""isComposite"": false,
@@ -216,6 +225,17 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8fa0abfc-c92a-4399-be2b-1b549f1ae02f"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightStickAim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -305,7 +325,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Hook"",
+                    ""name"": ""Harpoon"",
                     ""type"": ""Button"",
                     ""id"": ""c7595e8c-2892-44aa-b496-fbdaee3b1762"",
                     ""expectedControlType"": ""Button"",
@@ -319,7 +339,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""73af4fc0-cf36-4714-9059-30c1c3d20b11"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold(duration=0.25)"",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Shoot"",
@@ -330,7 +350,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""06eebbd0-5d9d-4e5a-9016-26aeb735425e"",
                     ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold(duration=0.25)"",
                     ""processors"": ""AxisDeadzone"",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Shoot"",
@@ -344,7 +364,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Hook"",
+                    ""action"": ""Harpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -355,7 +375,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": ""AxisDeadzone"",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Hook"",
+                    ""action"": ""Harpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -398,6 +418,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
         m_General_RollGlide = m_General.FindAction("RollGlide", throwIfNotFound: true);
         m_General_Aim = m_General.FindAction("Aim", throwIfNotFound: true);
         m_General_Mouse = m_General.FindAction("Mouse", throwIfNotFound: true);
+        m_General_RightStickAim = m_General.FindAction("RightStickAim", throwIfNotFound: true);
         // Regular
         m_Regular = asset.FindActionMap("Regular", throwIfNotFound: true);
         m_Regular_Attack = m_Regular.FindAction("Attack", throwIfNotFound: true);
@@ -405,7 +426,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
         // Aim
         m_Aim = asset.FindActionMap("Aim", throwIfNotFound: true);
         m_Aim_Shoot = m_Aim.FindAction("Shoot", throwIfNotFound: true);
-        m_Aim_Hook = m_Aim.FindAction("Hook", throwIfNotFound: true);
+        m_Aim_Harpoon = m_Aim.FindAction("Harpoon", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -469,6 +490,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_General_RollGlide;
     private readonly InputAction m_General_Aim;
     private readonly InputAction m_General_Mouse;
+    private readonly InputAction m_General_RightStickAim;
     public struct GeneralActions
     {
         private @GameplayControls m_Wrapper;
@@ -477,6 +499,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
         public InputAction @RollGlide => m_Wrapper.m_General_RollGlide;
         public InputAction @Aim => m_Wrapper.m_General_Aim;
         public InputAction @Mouse => m_Wrapper.m_General_Mouse;
+        public InputAction @RightStickAim => m_Wrapper.m_General_RightStickAim;
         public InputActionMap Get() { return m_Wrapper.m_General; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -498,6 +521,9 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                 @Mouse.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnMouse;
                 @Mouse.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnMouse;
                 @Mouse.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnMouse;
+                @RightStickAim.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnRightStickAim;
+                @RightStickAim.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnRightStickAim;
+                @RightStickAim.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnRightStickAim;
             }
             m_Wrapper.m_GeneralActionsCallbackInterface = instance;
             if (instance != null)
@@ -514,6 +540,9 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                 @Mouse.started += instance.OnMouse;
                 @Mouse.performed += instance.OnMouse;
                 @Mouse.canceled += instance.OnMouse;
+                @RightStickAim.started += instance.OnRightStickAim;
+                @RightStickAim.performed += instance.OnRightStickAim;
+                @RightStickAim.canceled += instance.OnRightStickAim;
             }
         }
     }
@@ -564,13 +593,13 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Aim;
     private IAimActions m_AimActionsCallbackInterface;
     private readonly InputAction m_Aim_Shoot;
-    private readonly InputAction m_Aim_Hook;
+    private readonly InputAction m_Aim_Harpoon;
     public struct AimActions
     {
         private @GameplayControls m_Wrapper;
         public AimActions(@GameplayControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Shoot => m_Wrapper.m_Aim_Shoot;
-        public InputAction @Hook => m_Wrapper.m_Aim_Hook;
+        public InputAction @Harpoon => m_Wrapper.m_Aim_Harpoon;
         public InputActionMap Get() { return m_Wrapper.m_Aim; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -583,9 +612,9 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                 @Shoot.started -= m_Wrapper.m_AimActionsCallbackInterface.OnShoot;
                 @Shoot.performed -= m_Wrapper.m_AimActionsCallbackInterface.OnShoot;
                 @Shoot.canceled -= m_Wrapper.m_AimActionsCallbackInterface.OnShoot;
-                @Hook.started -= m_Wrapper.m_AimActionsCallbackInterface.OnHook;
-                @Hook.performed -= m_Wrapper.m_AimActionsCallbackInterface.OnHook;
-                @Hook.canceled -= m_Wrapper.m_AimActionsCallbackInterface.OnHook;
+                @Harpoon.started -= m_Wrapper.m_AimActionsCallbackInterface.OnHarpoon;
+                @Harpoon.performed -= m_Wrapper.m_AimActionsCallbackInterface.OnHarpoon;
+                @Harpoon.canceled -= m_Wrapper.m_AimActionsCallbackInterface.OnHarpoon;
             }
             m_Wrapper.m_AimActionsCallbackInterface = instance;
             if (instance != null)
@@ -593,9 +622,9 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
-                @Hook.started += instance.OnHook;
-                @Hook.performed += instance.OnHook;
-                @Hook.canceled += instance.OnHook;
+                @Harpoon.started += instance.OnHarpoon;
+                @Harpoon.performed += instance.OnHarpoon;
+                @Harpoon.canceled += instance.OnHarpoon;
             }
         }
     }
@@ -624,6 +653,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
         void OnRollGlide(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnMouse(InputAction.CallbackContext context);
+        void OnRightStickAim(InputAction.CallbackContext context);
     }
     public interface IRegularActions
     {
@@ -633,6 +663,6 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
     public interface IAimActions
     {
         void OnShoot(InputAction.CallbackContext context);
-        void OnHook(InputAction.CallbackContext context);
+        void OnHarpoon(InputAction.CallbackContext context);
     }
 }

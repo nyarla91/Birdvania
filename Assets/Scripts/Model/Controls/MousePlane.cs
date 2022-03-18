@@ -1,5 +1,4 @@
 ﻿using System;
-using Model.Player;
 using NyarlaEssentials;
 using UnityEngine;
 using Zenject;

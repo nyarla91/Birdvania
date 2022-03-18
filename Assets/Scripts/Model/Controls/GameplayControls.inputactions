@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "RightStickAim",
+                    "type": "Value",
+                    "id": "8a4b2ace-8f19-4b75-a90e-fdafc06c8f75",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -134,7 +143,7 @@
                 {
                     "name": "",
                     "id": "90b9d604-b717-48e6-9cd9-35b81fbf3e9f",
-                    "path": "<Keyboard>/alt",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
@@ -147,7 +156,7 @@
                     "id": "7d93f06a-b2e4-4bd0-82e2-6cc323e78b22",
                     "path": "<Gamepad>/rightStick/left",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "AxisDeadzone",
                     "groups": "Gamepad",
                     "action": "Aim",
                     "isComposite": false,
@@ -158,7 +167,7 @@
                     "id": "a64f3aa1-7bc3-45e6-8bca-daf3caca6994",
                     "path": "<Gamepad>/rightStick/right",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "AxisDeadzone",
                     "groups": "Gamepad",
                     "action": "Aim",
                     "isComposite": false,
@@ -169,7 +178,7 @@
                     "id": "e0081d39-d117-41d3-89f5-1efb1b452642",
                     "path": "<Gamepad>/rightStick/up",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "AxisDeadzone",
                     "groups": "Gamepad",
                     "action": "Aim",
                     "isComposite": false,
@@ -180,7 +189,7 @@
                     "id": "b9d6afd5-06f0-46d1-8a50-9a6117260e17",
                     "path": "<Gamepad>/rightStick/down",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "AxisDeadzone",
                     "groups": "Gamepad",
                     "action": "Aim",
                     "isComposite": false,
@@ -194,6 +203,17 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Mouse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8fa0abfc-c92a-4399-be2b-1b549f1ae02f",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightStickAim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -283,7 +303,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Hook",
+                    "name": "Harpoon",
                     "type": "Button",
                     "id": "c7595e8c-2892-44aa-b496-fbdaee3b1762",
                     "expectedControlType": "Button",
@@ -297,7 +317,7 @@
                     "name": "",
                     "id": "73af4fc0-cf36-4714-9059-30c1c3d20b11",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "",
+                    "interactions": "Hold(duration=0.25)",
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Shoot",
@@ -308,7 +328,7 @@
                     "name": "",
                     "id": "06eebbd0-5d9d-4e5a-9016-26aeb735425e",
                     "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
+                    "interactions": "Hold(duration=0.25)",
                     "processors": "AxisDeadzone",
                     "groups": "Gamepad",
                     "action": "Shoot",
@@ -322,7 +342,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Hook",
+                    "action": "Harpoon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -333,7 +353,7 @@
                     "interactions": "",
                     "processors": "AxisDeadzone",
                     "groups": "Gamepad",
-                    "action": "Hook",
+                    "action": "Harpoon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
