@@ -1,4 +1,5 @@
-﻿using Model.Gameplay.Entity;
+﻿using System;
+using Model.Gameplay.Entity;
 using UnityEngine;
 
 namespace Model.Gameplay.Projectiles
@@ -16,6 +17,9 @@ namespace Model.Gameplay.Projectiles
         private Rigidbody _rigidbody;
         private Vector3 _direction;
 
+        public event Action<Hitbox> OnHit;
+        public event Action OnMiss;
+
         public Rigidbody Rigidbody => _rigidbody ??= GetComponent<Rigidbody>();
         public Vector3 Velocity => _direction * _speed;
 
@@ -29,7 +33,7 @@ namespace Model.Gameplay.Projectiles
             Rigidbody.position += Velocity * Time.fixedDeltaTime;
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnCollisionEnter(Collision other)
         {
             if (other.gameObject.TryGetComponent(out Hitbox target))
             {
@@ -37,13 +41,12 @@ namespace Model.Gameplay.Projectiles
                 {
                     target.TakeHit(_damage, _stunTime, _direction * _pushForce);
                 }
-                Destroy(gameObject);
+                OnHit?.Invoke(target);
             }
-        }
-
-        private void OnCollisionEnter(Collision other)
-        {
-            OnTriggerEnter(other.collider);
+            else
+            {
+                OnMiss?.Invoke();
+            }
             Destroy(gameObject);
         }
     }

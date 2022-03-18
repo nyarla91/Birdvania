@@ -19,6 +19,9 @@ namespace Model.Gameplay.Player
         private Coroutine _aimingCoroutine;
         private State _aimState;
         private InputBuffer _aimBuffer;
+        private RaycastHit _hitscanReuslt;
+
+        public RaycastHit HitscanReuslt => _hitscanReuslt;
 
         public event Action OnStartAim;
         public event Action OnEndAim;
@@ -65,7 +68,7 @@ namespace Model.Gameplay.Player
 
         private void Start()
         {
-            _line.Init(this, Controls);
+            _line.Init(this, Gun, Controls);
             _aimState = StateMachine.GetState(AimingState);
             _aimBuffer.OnPerformed += StartAim;
             _aimState.OnExit += EndAim;
@@ -75,9 +78,21 @@ namespace Model.Gameplay.Player
         {
             if (_aimBuffer != null)
                 _aimBuffer.PerformAllowed = StateMachine.CurrentState.CanSwitchToState(AimingState);
+
             if (StateMachine.IsCurrentState(AimingState))
+            {
                 Marker.RotateToDirection(Controls.AimDirection, Single.MaxValue);
+                Hitscan();
+            }
         }
 
+        private void Hitscan()
+        {
+            LayerMask layerMask = LayerMask.GetMask(new[] {"Enemy", "Destructable", "Wall", "Floor"});
+            Ray ray = new Ray(transform.position + new Vector3(0, 0.5f, 0), Controls.AimDirection);
+
+            if (!Physics.Raycast(ray, out _hitscanReuslt, 50, layerMask, QueryTriggerInteraction.Collide))
+                return;
+        }
     }
 }

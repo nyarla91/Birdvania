@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Model.Gameplay.Entity;
 using Model.Gameplay.Projectiles;
 using NyarlaEssentials;
@@ -17,64 +18,68 @@ namespace Model.Gameplay.Player
         private GameplayControls _controls;
 
         private Coroutine _chargingCoroutine;
-        private float _shotCharge;
+        private float _powerShotCharge;
+
+        public event Action OnPowerShotCharged;
+        public event Action OnPowerShotStopped;
         
         [Inject]
         private void Construct(GameplayControls controls)
         {
             _controls = controls;
-            _controls.Aim.Shoot.performed += ShootHolded;
-            _controls.Aim.Shoot.canceled += ShootReleased;
+            _controls.Aim.Shoot.performed += ShootButtonHolded;
+            _controls.Aim.Shoot.canceled += ShootButtonReleased;
         }
 
-        private void ShootHolded(InputAction.CallbackContext obj)
+        private void ShootButtonHolded(InputAction.CallbackContext obj)
         {
             if (StateMachine.IsCurrentState(PlayerAim.AimingState))
             {
-                _chargingCoroutine = StartCoroutine(ShotCharge());
+                _chargingCoroutine = StartCoroutine(PowerShotCharge());
             }
         }
 
-        private void ShootReleased(InputAction.CallbackContext context)
+        private void ShootButtonReleased(InputAction.CallbackContext context)
         {
             _chargingCoroutine?.StopThisCoroutine(this);
             _chargingCoroutine = null;
+            OnPowerShotStopped?.Invoke();
 
             if (!StateMachine.IsCurrentState(PlayerAim.AimingState))
                 return;
             
-            if (_shotCharge >= _powerShotHoldTime)
-                PowerShot();
+            if (_powerShotCharge >= _powerShotHoldTime)
+                PerformPowerShot();
             else
-                Shoot(Controls.AimDirection);
-            _shotCharge = 0;
+                PerformShot(Controls.AimDirection);
+            _powerShotCharge = 0;
         }
 
-        private IEnumerator ShotCharge()
+        private IEnumerator PowerShotCharge()
         {
             while (true)
             {
-                _shotCharge += Time.fixedDeltaTime;
+                _powerShotCharge += Time.fixedDeltaTime;
+                if (_powerShotCharge >= _powerShotHoldTime)
+                    OnPowerShotCharged?.Invoke();
+                
                 yield return new WaitForFixedUpdate();
             }
         }
 
-        private void Shoot(Vector3 direction)
+        private void PerformShot(Vector3 direction)
         {
-            LayerMask layerMask = LayerMask.GetMask(new []{"Enemy", "Destructable", "Wall", "Floor"});
-            Ray ray = new Ray(transform.position + new Vector3(0, 0.5f, 0), direction);
-            
-            if (!Physics.Raycast(ray, out RaycastHit raycastHit, 50, layerMask, QueryTriggerInteraction.Collide))
+            if (Aim.HitscanReuslt.collider == null)
                 return;
             
-            if (raycastHit.collider.TryGetComponent(out Hitbox target))
+            if (Aim.HitscanReuslt.collider.TryGetComponent(out Hitbox target))
             {
-                print($"{raycastHit.collider} {raycastHit.distance}");
+                print($"{Aim.HitscanReuslt.collider} {Aim.HitscanReuslt.distance}");
                 target.TakeHit(_shotDamage, 0.2f, direction * _shotPushForce);
             }
         }
 
-        private void PowerShot()
+        private void PerformPowerShot()
         {
             Projectile projectile = InstantiateForComponent<Projectile>(_powerShotPrefab, transform.position);
             projectile.Init(Controls.AimDirection);

@@ -165,7 +165,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""90b9d604-b717-48e6-9cd9-35b81fbf3e9f"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -301,7 +301,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6312fab7-e3c2-4e13-8a7d-f6d27f34d1ad"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -360,7 +360,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4535e56a-8eda-4c54-be60-6a60f0528ffd"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
