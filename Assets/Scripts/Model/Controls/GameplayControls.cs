@@ -71,6 +71,15 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CancelHarpoon"",
+                    ""type"": ""Button"",
+                    ""id"": ""1cdb35cb-d2d2-4f6b-9cb4-280100d5bab1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -236,6 +245,28 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""RightStickAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f400fc2c-2a3f-4f2a-8304-b926f8d68518"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CancelHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da0452c3-1be2-4c1c-bdd1-9cfa436d4913"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CancelHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -419,6 +450,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
         m_General_Aim = m_General.FindAction("Aim", throwIfNotFound: true);
         m_General_Mouse = m_General.FindAction("Mouse", throwIfNotFound: true);
         m_General_RightStickAim = m_General.FindAction("RightStickAim", throwIfNotFound: true);
+        m_General_CancelHarpoon = m_General.FindAction("CancelHarpoon", throwIfNotFound: true);
         // Regular
         m_Regular = asset.FindActionMap("Regular", throwIfNotFound: true);
         m_Regular_Attack = m_Regular.FindAction("Attack", throwIfNotFound: true);
@@ -491,6 +523,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_General_Aim;
     private readonly InputAction m_General_Mouse;
     private readonly InputAction m_General_RightStickAim;
+    private readonly InputAction m_General_CancelHarpoon;
     public struct GeneralActions
     {
         private @GameplayControls m_Wrapper;
@@ -500,6 +533,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
         public InputAction @Aim => m_Wrapper.m_General_Aim;
         public InputAction @Mouse => m_Wrapper.m_General_Mouse;
         public InputAction @RightStickAim => m_Wrapper.m_General_RightStickAim;
+        public InputAction @CancelHarpoon => m_Wrapper.m_General_CancelHarpoon;
         public InputActionMap Get() { return m_Wrapper.m_General; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -524,6 +558,9 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                 @RightStickAim.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnRightStickAim;
                 @RightStickAim.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnRightStickAim;
                 @RightStickAim.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnRightStickAim;
+                @CancelHarpoon.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnCancelHarpoon;
+                @CancelHarpoon.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnCancelHarpoon;
+                @CancelHarpoon.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnCancelHarpoon;
             }
             m_Wrapper.m_GeneralActionsCallbackInterface = instance;
             if (instance != null)
@@ -543,6 +580,9 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
                 @RightStickAim.started += instance.OnRightStickAim;
                 @RightStickAim.performed += instance.OnRightStickAim;
                 @RightStickAim.canceled += instance.OnRightStickAim;
+                @CancelHarpoon.started += instance.OnCancelHarpoon;
+                @CancelHarpoon.performed += instance.OnCancelHarpoon;
+                @CancelHarpoon.canceled += instance.OnCancelHarpoon;
             }
         }
     }
@@ -654,6 +694,7 @@ public partial class @GameplayControls : IInputActionCollection2, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnMouse(InputAction.CallbackContext context);
         void OnRightStickAim(InputAction.CallbackContext context);
+        void OnCancelHarpoon(InputAction.CallbackContext context);
     }
     public interface IRegularActions
     {

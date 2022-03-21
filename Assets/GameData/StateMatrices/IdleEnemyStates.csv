@@ -1,0 +1,5 @@
+,Regular,Attack,Stun,Harpoon
+Regular,F,A,A,A
+Attack,A,F,F,F
+Stun,A,F,F,A
+Harpoon,A,F,A,F

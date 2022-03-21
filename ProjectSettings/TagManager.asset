@@ -18,7 +18,7 @@ TagManager:
   - PlayerProjectile
   - EnemyProjectile
   - Wall
-  - PlayerIFrame
+  - PlayerRolling
   - Obstacle
   - Floor
   - Destructable

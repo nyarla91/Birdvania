@@ -2,6 +2,8 @@
 using NyarlaEssentials;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+using Gyroscope = UnityEngine.InputSystem.Gyroscope;
 
 namespace Model.Controls
 {

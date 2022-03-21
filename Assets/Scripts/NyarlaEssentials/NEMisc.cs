@@ -17,10 +17,15 @@ namespace NyarlaEssentials
             GameObject.Destroy(gameObject);
         }
 
+        public static void StopThisCoroutine(this Coroutine coroutine, MonoBehaviour container, ref Coroutine fieldToClear)
+        {
+            coroutine.StopThisCoroutine(container);
+            fieldToClear = null;
+        }
+
         public static void StopThisCoroutine(this Coroutine coroutine, MonoBehaviour container)
         {
             container.StopCoroutine(coroutine);
-            coroutine = null;
         }
 
         public static void SetAlpha(this Image image, float alpha)
@@ -28,5 +33,14 @@ namespace NyarlaEssentials
             Color originColor = image.color;
             image.color = new Color(originColor.r, originColor.g, originColor.b, alpha);
         }
+
+        public static bool NullOrAssign<T>(this T obj, out T target)
+        {
+            target = obj;
+            return target != null;
+        }
+
+        public static Vector3 DirectionTo(this Transform transform, Vector3 target) => target - transform.position;
+        public static Vector3 DirectionTo(this Transform transform, Transform target) => target.DirectionTo(target.position);
     }
 }

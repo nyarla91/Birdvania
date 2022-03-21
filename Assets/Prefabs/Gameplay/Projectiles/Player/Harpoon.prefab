@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1685465740498302507}
   - component: {fileID: 8708294317246834838}
   m_Layer: 8
-  m_Name: PowerShot
+  m_Name: Harpoon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,10 +76,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc29d8bb24a84a06913e920018238ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 12
+  _speed: 24
   _hitDestructables: 1
-  _damage: 4
-  _pushForce: 4
+  _damage: 1
+  _pushForce: 0
   _stunTime: 0.2
 --- !u!1 &8708294317611101095
 GameObject:
@@ -142,7 +142,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 05a323184eefcec41abec9333171e752, type: 2}
+  - {fileID: 2100000, guid: eb5315e2f77c540b6bf545720e84d3a5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

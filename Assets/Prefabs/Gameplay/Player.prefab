@@ -443,7 +443,6 @@ GameObject:
   - component: {fileID: -4768352359518104057}
   - component: {fileID: -7183464596290515869}
   - component: {fileID: 6182116639082022057}
-  - component: {fileID: 4118705835531300654}
   - component: {fileID: 6895260245516167812}
   - component: {fileID: 3409714972513204594}
   - component: {fileID: 6182116639082022053}
@@ -452,6 +451,7 @@ GameObject:
   - component: {fileID: -1367104177264156830}
   - component: {fileID: 7526511833667459553}
   - component: {fileID: 8283789822150202583}
+  - component: {fileID: 7420588250510314798}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -554,23 +554,6 @@ MonoBehaviour:
   _blockedByObstacle: 1
   _forceDrag: 10
   _canBePushedByOpponent: 1
---- !u!114 &4118705835531300654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6182116639082022056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8ef1bd74ab34d2285a8a126ebc0a105, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _healthStorage: {fileID: 0}
-  _stunned: {fileID: 0}
-  _movable: {fileID: 0}
-  _type: 0
-  _hitImmunityDuration: 0.7
 --- !u!114 &6895260245516167812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31588e771368f124890d4e591704ec67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stateTable: {fileID: 4900000, guid: 97acb6dd03a6e784d83a6306f925a00a, type: 3}
+  _stateTable: {fileID: 4900000, guid: 5e5666ab35ea3f648902763ac4fe0f61, type: 3}
   _currentState:
     _name: 
     _forbiddenTransitions: []
@@ -727,6 +710,22 @@ MonoBehaviour:
   _shotDamage: 1
   _shotPushForce: 1
   _powerShotHoldTime: 0.75
+--- !u!114 &7420588250510314798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6182116639082022056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0a5aca9c03453cbf514f6e9692fac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _harpoonPrefab: {fileID: 8708294317246834833, guid: 55d377312344c374d9f339b7eb0acd45, type: 3}
+  _pullSpeed: 15
+  _minDelta: 0.824
+  _pullStopDistance: 1.5
 --- !u!1 &8554597126425926055
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,10 +772,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _healthStorage: {fileID: -4768352359518104057}
+  _stateMachine: {fileID: 3409714972513204594}
   _stunned: {fileID: -7183464596290515869}
   _movable: {fileID: 6182116639082022057}
   _type: 0
   _hitImmunityDuration: 0
+  _harpoonPullMode: 0
 --- !u!136 &946393121315334798
 CapsuleCollider:
   m_ObjectHideFlags: 0

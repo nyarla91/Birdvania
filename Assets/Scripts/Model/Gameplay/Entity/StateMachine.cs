@@ -38,6 +38,8 @@ namespace Model.Gameplay.Entity
             return true;
         }
 
+        public bool TryExitState(string stateName) => IsCurrentState(stateName) && TrySwitchToState(Regular);
+
         public bool IsCurrentState(string stateName)
         {
             CheckStateForExistance(stateName);
@@ -56,6 +58,7 @@ namespace Model.Gameplay.Entity
 
         private void GeneraleStateList()
         {
+            _states = new List<State>();
             string[] lines = _stateTable.text.Split('\n');
             
             List<string> stateNames = lines[0].Split(',').ToList();
@@ -68,7 +71,7 @@ namespace Model.Gameplay.Entity
             CurrentState = _states[0];
         }
 
-        private static State GenerateState(string[] lines, int y, List<string> stateNames)
+        private State GenerateState(string[] lines, int y, List<string> stateNames)
         {
             string[] currentLine = lines[y].Split(',');
             List<string> forbiddenTransitions = new List<string>();

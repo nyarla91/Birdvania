@@ -20,7 +20,7 @@ namespace Model.Gameplay.Player
         private bool _attackAllowed;
         private bool _attackReady = true;
 
-        public MeleeAttack MeleeAttack => _meleeAttack ??= GetComponent<MeleeAttack>();
+        private MeleeAttack MeleeAttack => _meleeAttack ??= GetComponent<MeleeAttack>();
         
         [Inject]
         private void Construct(GameplayControls controls)

@@ -43,10 +43,7 @@ namespace Model.Gameplay.Player
         private void AimReleased(InputAction.CallbackContext context)
         {
             _aimBuffer.InterruptBuffering();
-            if (StateMachine.IsCurrentState(AimingState))
-            {
-                StateMachine.TrySwitchToState(StateMachine.Regular);
-            }
+            StateMachine.TryExitState(AimingState);
         }
 
         private void StartAim()
@@ -91,8 +88,7 @@ namespace Model.Gameplay.Player
             LayerMask layerMask = LayerMask.GetMask(new[] {"Enemy", "Destructable", "Wall", "Floor"});
             Ray ray = new Ray(transform.position + new Vector3(0, 0.5f, 0), Controls.AimDirection);
 
-            if (!Physics.Raycast(ray, out _hitscanReuslt, 50, layerMask, QueryTriggerInteraction.Collide))
-                return;
+            Physics.Raycast(ray, out _hitscanReuslt, 50, layerMask, QueryTriggerInteraction.Collide);
         }
     }
 }

@@ -1,0 +1,9 @@
+,Regular,Attack,Stun,Harpoon,Block,Roll,Aiming,Fall
+Regular,F,A,A,F,A,A,A,A
+Attack,A,F,A,F,F,F,F,A
+Stun,A,F,F,F,F,F,F,A
+Harpoon,A,F,A,F,F,F,F,F
+Block,A,F,A,F,F,F,A,A
+Roll,A,F,A,F,F,F,F,F
+Aiming,A,F,A,A,F,F,F,A
+Fall,A,F,F,F,F,F,F,F

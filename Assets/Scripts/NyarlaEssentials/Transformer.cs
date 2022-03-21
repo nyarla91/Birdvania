@@ -7,7 +7,7 @@ namespace NyarlaEssentials
         private Transform _transform;
         private RectTransform _rectTransform;
         
-        public new Transform transform => _transform ??= ((Component) this).transform;
+        public new Transform transform => _transform ??= gameObject.transform;
         public RectTransform RectTransform => _rectTransform ??= GetComponent<RectTransform>();
     }
 }

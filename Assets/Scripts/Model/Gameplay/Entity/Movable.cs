@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Gameplay.Player;
 using NyarlaEssentials;
 using UnityEngine;
 
@@ -14,7 +15,8 @@ namespace Model.Gameplay.Entity
         [Header("Force")]
         [SerializeField] private float  _forceDrag = 10;
         [SerializeField] private bool  _canBePushedByOpponent = true;
-        
+
+        private StateMachine _stateMachine;
         private Rigidbody _rigidbody;
         private Dictionary<GameObject, Vector3> _contacts = new Dictionary<GameObject, Vector3>();
         private Vector3 _compositeNormal = Vector3.zero;
@@ -44,6 +46,7 @@ namespace Model.Gameplay.Entity
             }
         }
         private Rigidbody Rigidbody => _rigidbody ??= GetComponent<Rigidbody>();
+        private StateMachine StateMachine => _stateMachine ??= GetComponent<StateMachine>();
 
         public float MaxFallingSpeed { get; set; } = -1;
         public Vector3 Force { get; private set; }
@@ -132,5 +135,18 @@ namespace Model.Gameplay.Entity
                 Rigidbody.velocity = Rigidbody.velocity.WithY(-MaxFallingSpeed);
             }
         }
+
+        private void Start()
+        {
+            if (StateMachine == null ||
+                !StateMachine.GetState(PlayerHarpoon.HarpoonState).NullOrAssign(out State harpoonState))
+                return;
+            
+            harpoonState.OnEnter += DisableGravity;
+            harpoonState.OnExit += EnableGravity;
+        }
+
+        private void DisableGravity() => Rigidbody.useGravity = false;
+        private void EnableGravity() => Rigidbody.useGravity = true;
     }
 }

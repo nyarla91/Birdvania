@@ -33,21 +33,35 @@ namespace Model.Gameplay.Projectiles
             Rigidbody.position += Velocity * Time.fixedDeltaTime;
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.TryGetComponent(out Hitbox target))
+            {
+                HandleHit(target);
+                Destroy(gameObject);
+            }
+        }
+
         private void OnCollisionEnter(Collision other)
         {
             if (other.gameObject.TryGetComponent(out Hitbox target))
             {
-                if (target.Type != TargetType.Destructable || _hitDestructables)
-                {
-                    target.TakeHit(_damage, _stunTime, _direction * _pushForce);
-                }
-                OnHit?.Invoke(target);
+                HandleHit(target);
             }
             else
             {
                 OnMiss?.Invoke();
             }
             Destroy(gameObject);
+        }
+
+        private void HandleHit(Hitbox target)
+        {
+            if (target.Type != TargetType.Destructable || _hitDestructables)
+            {
+                target.TakeHit(_damage, _stunTime, _direction * _pushForce);
+            }
+            OnHit?.Invoke(target);
         }
     }
 }

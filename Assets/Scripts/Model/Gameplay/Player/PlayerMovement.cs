@@ -58,9 +58,7 @@ namespace Model.Gameplay.Player
             if (!StateMachine.TrySwitchToState(RollState))
                 return;
             
-            Vector3 direction = Controls.InputScheme == InputScheme.KeyboardMouse
-                ? Controls.AimDirection
-                : Controls.WorldMoveVector;
+            Vector3 direction = Controls.WorldMoveVector;
             if (direction.Equals(Vector3.zero))
                 direction = transform.forward;
                 
@@ -79,7 +77,7 @@ namespace Model.Gameplay.Player
                 Movable.Move(direction * speed * Time.fixedDeltaTime, true, false);
                 yield return new WaitForFixedUpdate();
             }
-            StateMachine.TrySwitchToState(StateMachine.Regular);
+            StateMachine.TryExitState(RollState);
         }
 
         private void ExitRoll()

@@ -113,10 +113,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31588e771368f124890d4e591704ec67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stateTable: {fileID: 4900000, guid: 97acb6dd03a6e784d83a6306f925a00a, type: 3}
+  _stateTable: {fileID: 4900000, guid: 4b6837625a9bcb84c877a2b311607a86, type: 3}
   _currentState:
-    _name: 
-    _forbiddenTransitions: []
+    _name: Regular
+    _forbiddenTransitions:
+    - Regular
   _states: []
 --- !u!114 &2815274359126760358
 MonoBehaviour:
@@ -222,8 +223,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2815274360297276116}
-  - component: {fileID: 2815274360297276139}
   - component: {fileID: 2815274360297276138}
+  - component: {fileID: 2815274360297276139}
   m_Layer: 7
   m_Name: Hitbox
   m_TagString: Untagged
@@ -246,23 +247,6 @@ Transform:
   m_Father: {fileID: 2815274359126760378}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2815274360297276139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2815274360297276117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8ef1bd74ab34d2285a8a126ebc0a105, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _healthStorage: {fileID: 2815274359126760383}
-  _stunned: {fileID: 2815274359126760358}
-  _movable: {fileID: 2815274359126760356}
-  _type: 1
-  _hitImmunityDuration: 0
 --- !u!135 &2815274360297276138
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -276,3 +260,22 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.7
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &2815274360297276139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2815274360297276117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ef1bd74ab34d2285a8a126ebc0a105, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthStorage: {fileID: 2815274359126760383}
+  _stateMachine: {fileID: 2815274359126760357}
+  _stunned: {fileID: 2815274359126760358}
+  _movable: {fileID: 2815274359126760356}
+  _type: 1
+  _hitImmunityDuration: 0
+  _harpoonPullMode: 2

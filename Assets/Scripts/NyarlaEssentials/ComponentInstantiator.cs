@@ -13,6 +13,8 @@ namespace NyarlaEssentials
         
         protected T InstantiateForComponent<T>(GameObject prefab, Vector3 position, Transform parent)
             where T : MonoBehaviour => InstantiateForComponent<T>(prefab, position, Quaternion.identity, parent);
+        protected T InstantiateForComponent<T>(GameObject prefab, Transform parent)
+            where T : MonoBehaviour => InstantiateForComponent<T>(prefab, parent.position, Quaternion.identity, parent);
         
         protected T InstantiateForComponent<T>(GameObject prefab, Vector3 position, Quaternion rotation)
             where T : MonoBehaviour => InstantiateForComponent<T>(prefab, position, rotation, null);
