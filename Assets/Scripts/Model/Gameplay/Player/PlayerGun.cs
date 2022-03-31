@@ -4,6 +4,7 @@ using Model.Gameplay.Entity;
 using Model.Gameplay.Projectiles;
 using NyarlaEssentials;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using Zenject;
 
