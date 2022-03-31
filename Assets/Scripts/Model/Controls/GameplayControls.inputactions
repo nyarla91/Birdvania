@@ -56,8 +56,17 @@
                     "id": "1cdb35cb-d2d2-4f6b-9cb4-280100d5bab1",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold(duration=1.401298E-45,pressPoint=0.9)",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "LeftTrigger",
+                    "type": "Value",
+                    "id": "03a73095-d513-4f98-8509-6619e2f8a581",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -66,7 +75,7 @@
                     "id": "b1e377e8-c467-4759-989f-fd40024ac57d",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone(min=0.25)",
                     "groups": "Gamepad",
                     "action": "Move",
                     "isComposite": false,
@@ -247,6 +256,17 @@
                     "action": "CancelHarpoon",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "254a5ad7-3552-4fab-8c8f-edc1cb1980a5",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LeftTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -358,9 +378,9 @@
                 {
                     "name": "",
                     "id": "06eebbd0-5d9d-4e5a-9016-26aeb735425e",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "Hold(duration=0.25)",
-                    "processors": "AxisDeadzone",
+                    "processors": "",
                     "groups": "Gamepad",
                     "action": "Shoot",
                     "isComposite": false,
@@ -381,8 +401,8 @@
                     "name": "",
                     "id": "817ba869-ad4d-480a-818f-86aca322228c",
                     "path": "<Gamepad>/leftTrigger",
-                    "interactions": "",
-                    "processors": "AxisDeadzone",
+                    "interactions": "Hold(duration=1.401298E-45,pressPoint=0.9)",
+                    "processors": "",
                     "groups": "Gamepad",
                     "action": "Harpoon",
                     "isComposite": false,

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Model.Gameplay.Entity
 {
     [RequireComponent(typeof(StateMachine))]
-    public class Stunned : MonoBehaviour
+    public class Disoriented : MonoBehaviour
     {
         private StateMachine _stateMachine;
 
@@ -14,10 +14,22 @@ namespace Model.Gameplay.Entity
             
         }
 
+        public void Stagger(float duration)
+        {
+            
+        }
+
         private void Start()
         {
             if (StateMachine.GetState("Stun") == null)
                 throw new Exception($"{gameObject.name}'s StateMachine must have \"Stun\" state");
         }
+    }
+
+    public enum DisorientationType
+    {
+        Stun,
+        Stagger,
+        Freeze
     }
 }

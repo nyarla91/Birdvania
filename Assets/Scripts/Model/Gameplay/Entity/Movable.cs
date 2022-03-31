@@ -10,31 +10,26 @@ namespace Model.Gameplay.Entity
     [RequireComponent(typeof(Rigidbody))]
     public class Movable : Transformer
     {
-        [SerializeField] private float  _minSpeedToFall;
         [SerializeField] private bool _blockedByObstacle = true;
         [Header("Force")]
         [SerializeField] private float  _forceDrag = 10;
         [SerializeField] private bool  _canBePushedByOpponent = true;
+        [SerializeField] private bool _isGrounded;
 
         private StateMachine _stateMachine;
         private Rigidbody _rigidbody;
-        private Dictionary<GameObject, Vector3> _contacts = new Dictionary<GameObject, Vector3>();
+        private readonly Dictionary<Transform, Vector3> _floors = new Dictionary<Transform, Vector3>();
         private Vector3 _compositeNormal = Vector3.zero;
-        private bool _isGrounded;
 
         public event Action OnFallStart;
         public event Action OnGrounded;
 
-        public bool BlockedByObstacle
-        {
-            get => _blockedByObstacle;
-            set => _blockedByObstacle = value;
-        }
+        private bool BlockedByObstacle => gameObject.layer != 11 && gameObject.layer != 15;
 
-        public bool IsGrounded
+        private bool IsGrounded
         {
             get => _isGrounded;
-            private set
+            set
             {
                 if (value == _isGrounded)
                     return;
@@ -45,6 +40,9 @@ namespace Model.Gameplay.Entity
                     OnFallStart?.Invoke();
             }
         }
+
+        private Vector3 CompositeFrameMovement { get; set; }
+        
         private Rigidbody Rigidbody => _rigidbody ??= GetComponent<Rigidbody>();
         private StateMachine StateMachine => _stateMachine ??= GetComponent<StateMachine>();
 
@@ -73,26 +71,25 @@ namespace Model.Gameplay.Entity
             if (alongTheSurface)
                 delta = AlignVector(delta);
             
-            Vector3 targetPosition = transform.position + delta;
-            if (clips)
+            if (!clips)
             {
-                targetPosition = CalculatePatency(delta, targetPosition);
+                delta = CalculatePatency(delta);
             }
-            Rigidbody.position = targetPosition;
+            CompositeFrameMovement += delta;
         }
 
-        private Vector3 CalculatePatency(Vector3 delta, Vector3 targetPosition)
+        private Vector3 CalculatePatency(Vector3 delta)
         {
-            LayerMask raycastMask = LayerMask.GetMask("Wall");
-            if (BlockedByObstacle)
-                raycastMask += LayerMask.GetMask("Obstacle");
+            LayerMask raycastMask = LayerMask.GetMask(BlockedByObstacle
+                ? new[] {"Wall", "Obstacle"}
+                : new[] {"Wall"});
             Ray ray = new Ray(transform.position, delta);
             if (Physics.Raycast(ray, out RaycastHit raycastHit, delta.magnitude, raycastMask))
             {
-                targetPosition = raycastHit.point - delta.normalized * 0.2f;
+                delta = raycastHit.point - transform.position - delta.normalized * 0.2f;
             }
 
-            return targetPosition;
+            return delta;
         }
 
         private Vector3 AlignVector(Vector3 direction) =>
@@ -103,23 +100,32 @@ namespace Model.Gameplay.Entity
             if (other.gameObject.layer.Equals(13))
             {
                 IsGrounded = true;
-                _contacts.Add(other.gameObject, other.contacts[0].normal);
-                UpdateCompositeNormal();
+                _floors.Add(other.transform, other.contacts[0].normal);
+                UpdateFloorsNormalAndParent();
             }
         }
 
         private void OnCollisionExit(Collision other)
         {
-            if (_contacts.ContainsKey(other.gameObject))
+            if (_floors.ContainsKey(other.transform))
             {
-                _contacts.Remove(other.gameObject);
-                UpdateCompositeNormal();
+                _floors.Remove(other.transform);
+                UpdateFloorsNormalAndParent();
             }
         }
 
-        private void UpdateCompositeNormal()
+        private void UpdateFloorsNormalAndParent()
         {
-            _compositeNormal = _contacts.Values.ToArray().LerpMulti().normalized;
+            _compositeNormal = _floors.Values.ToArray().LerpMulti().normalized;
+            if (_floors.Count > 0)
+            {
+                Transform parent = _floors.Keys.OrderBy(floor => floor.gameObject.isStatic ? 1 : 0).ToList()[0];
+                transform.parent = parent;
+            }
+            else
+            {
+                transform.parent = null;
+            }
         }
 
         private void FixedUpdate()
@@ -127,26 +133,17 @@ namespace Model.Gameplay.Entity
             Force = Vector3.Lerp(Force, Vector3.zero, Time.fixedDeltaTime * _forceDrag);
             if (Force.magnitude > 0.1f)
                 Move(Force * Time.fixedDeltaTime, true, false);
+
+            IsGrounded = _floors.Count > 0;
+            Rigidbody.useGravity = !(StateMachine.IsCurrentState(PlayerHarpoon.HarpoonState) || IsGrounded);
             
-            if (Rigidbody.velocity.y < -_minSpeedToFall)
-                IsGrounded = false;
             if (MaxFallingSpeed > 0 && Rigidbody.velocity.y < -MaxFallingSpeed)
             {
                 Rigidbody.velocity = Rigidbody.velocity.WithY(-MaxFallingSpeed);
             }
-        }
 
-        private void Start()
-        {
-            if (StateMachine == null ||
-                !StateMachine.GetState(PlayerHarpoon.HarpoonState).NullOrAssign(out State harpoonState))
-                return;
-            
-            harpoonState.OnEnter += DisableGravity;
-            harpoonState.OnExit += EnableGravity;
+            Rigidbody.position += CompositeFrameMovement;
+            CompositeFrameMovement = Vector3.zero;
         }
-
-        private void DisableGravity() => Rigidbody.useGravity = false;
-        private void EnableGravity() => Rigidbody.useGravity = true;
     }
 }

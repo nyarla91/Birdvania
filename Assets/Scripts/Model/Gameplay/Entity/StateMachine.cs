@@ -10,6 +10,8 @@ namespace Model.Gameplay.Entity
         public const string Attack = "Attack";
         public const string Stun = "Stun";
         public const string Regular = "Regular";
+
+        private static Dictionary<TextAsset, List<State>> _generatedMachines = new Dictionary<TextAsset, List<State>>();
         
         [SerializeField] private TextAsset _stateTable;
         [Header("RUNTIME DEBUG ONLY")]
@@ -24,11 +26,18 @@ namespace Model.Gameplay.Entity
 
         public State GetState(string stateName) => _states.Find(state => state.Name.Equals(stateName));
 
-        public bool TrySwitchToState(string newStateName)
+        public bool TryEnterState(string stateName) => TryEnterState(stateName, false);
+        
+        private bool TryEnterState(string stateName, bool regularAllowed)
         {
-            CheckStateForExistance(newStateName);
-            State newState = _states.FirstOrDefault(state => state.Name.Equals(newStateName));
-            if (newState == null || !CurrentState.CanSwitchToState(newStateName))
+            if (!regularAllowed && stateName.Equals(Regular))
+                throw new ArgumentException(
+                    "Entering Regular state is frohibited." +
+                    "Use TryExitState to enter Regular state from specific state");
+            
+            CheckStateForExistance(stateName);
+            State newState = _states.FirstOrDefault(state => state.Name.Equals(stateName));
+            if (newState == null || !CurrentState.CanSwitchToState(stateName))
                 return false;
 
             State oldState = CurrentState;
@@ -38,7 +47,12 @@ namespace Model.Gameplay.Entity
             return true;
         }
 
-        public bool TryExitState(string stateName) => IsCurrentState(stateName) && TrySwitchToState(Regular);
+        public bool TryExitState(string stateName)
+        {
+            if (IsCurrentState(stateName))
+                return TryEnterState(Regular, true);
+            return false;
+        }
 
         public bool IsCurrentState(string stateName)
         {
@@ -53,7 +67,10 @@ namespace Model.Gameplay.Entity
 
         private void Awake()
         {
-            GeneraleStateList();
+            if (_generatedMachines.ContainsKey(_stateTable))
+                _states = _generatedMachines[_stateTable];
+            else
+                GeneraleStateList();
         }
 
         private void GeneraleStateList()
@@ -68,6 +85,9 @@ namespace Model.Gameplay.Entity
             {
                 _states.Add(GenerateState(lines, y, stateNames));
             }
+            
+            _generatedMachines.Add(_stateTable, _states);
+            
             CurrentState = _states[0];
         }
 
@@ -77,7 +97,7 @@ namespace Model.Gameplay.Entity
             List<string> forbiddenTransitions = new List<string>();
             for (int x = 1; x < currentLine.Length; x++)
             {
-                if (currentLine[x].Equals("F"))
+                if (currentLine[x][0] == 'F')
                     forbiddenTransitions.Add(stateNames[x - 1]);
             }
             State state = new State(currentLine[0], forbiddenTransitions);
@@ -113,6 +133,9 @@ namespace Model.Gameplay.Entity
             _forbiddenTransitions = frobiddenTransitions;
         }
 
-        public bool CanSwitchToState(string stateName) => !_forbiddenTransitions.Contains(stateName);
+        public bool CanSwitchToState(string stateName)
+        {
+            return !_forbiddenTransitions.Contains(stateName);
+        }
     }
 }

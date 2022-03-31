@@ -7,7 +7,7 @@ namespace Model.Gameplay.Entity
     {
         [SerializeField] private HealthStorage _healthStorage;
         [SerializeField] private StateMachine _stateMachine;
-        [SerializeField] private Stunned _stunned;
+        [SerializeField] private Disoriented _disoriented;
         [SerializeField] private Movable _movable;
         [Space]
         [SerializeField] private TargetType _type;
@@ -22,11 +22,27 @@ namespace Model.Gameplay.Entity
         public StateMachine StateMachine => _stateMachine;
         public Movable Movable => _movable;
 
-        public void TakeHit(int damage, float stunDuration, Vector3 push)
+        public void TakeHit(int damage, float disorientationDuration, DisorientationType disorientationType,
+            Vector3 directionTo, float pushForce)
         {
             _healthStorage?.TakeDamage(damage);
-            _stunned?.Stun(stunDuration);
-            _movable?.SetForce(push, true);
+            _movable?.SetForce(directionTo * pushForce, true);
+            
+            if (_hitImmunityDuration <= 0 || _disoriented == null)
+                return;
+
+            switch (disorientationType)
+            {
+                case DisorientationType.Stun:
+                    _disoriented.Stun(disorientationDuration);
+                    break;
+                case DisorientationType.Stagger:
+                    _disoriented.Stagger(disorientationDuration);
+                    break;
+                case DisorientationType.Freeze:
+                    _disoriented.Stun(disorientationDuration);
+                    break;
+            }
         }
     }
 
@@ -34,7 +50,7 @@ namespace Model.Gameplay.Entity
     {
         Player,
         Enemy,
-        Destructable
+        Neutral
     }
 
     public enum HarpoonPullMode

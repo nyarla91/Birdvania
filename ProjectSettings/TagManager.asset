@@ -21,8 +21,8 @@ TagManager:
   - PlayerRolling
   - Obstacle
   - Floor
-  - Destructable
-  - 
+  - Neutral
+  - EnemyRolling
   - 
   - 
   - 

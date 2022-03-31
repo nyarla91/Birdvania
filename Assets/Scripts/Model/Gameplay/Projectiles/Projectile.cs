@@ -12,7 +12,8 @@ namespace Model.Gameplay.Projectiles
         [Header("Effect")]
         [SerializeField] private int _damage;
         [SerializeField] private float _pushForce;
-        [SerializeField] private float _stunTime;
+        [SerializeField] private float _disorientationTime;
+        [SerializeField] private DisorientationType _disorientationType;
 
         private Rigidbody _rigidbody;
         private Vector3 _direction;
@@ -20,8 +21,8 @@ namespace Model.Gameplay.Projectiles
         public event Action<Hitbox> OnHit;
         public event Action OnMiss;
 
-        public Rigidbody Rigidbody => _rigidbody ??= GetComponent<Rigidbody>();
-        public Vector3 Velocity => _direction * _speed;
+        private Rigidbody Rigidbody => _rigidbody ??= GetComponent<Rigidbody>();
+        private Vector3 Velocity => _direction * _speed;
 
         public void Init(Vector3 direction)
         {
@@ -57,9 +58,9 @@ namespace Model.Gameplay.Projectiles
 
         private void HandleHit(Hitbox target)
         {
-            if (target.Type != TargetType.Destructable || _hitDestructables)
+            if (target.Type != TargetType.Neutral || _hitDestructables)
             {
-                target.TakeHit(_damage, _stunTime, _direction * _pushForce);
+                target.TakeHit(_damage, _disorientationTime, _disorientationType, _direction, _pushForce);
             }
             OnHit?.Invoke(target);
         }

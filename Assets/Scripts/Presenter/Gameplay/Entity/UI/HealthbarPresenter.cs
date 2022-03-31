@@ -12,7 +12,7 @@ namespace Presenter.Gameplay.Entity.UI
         [SerializeField] private HealthbarView _view;
 
         private HealthStorage _targetHealthStorage;
-        private Camera _mainCamera;
+        private UnityEngine.Camera _mainCamera;
         private Vector2 _offset;
 
         public void Init(HealthStorage targetHealthStorage, float width, Vector2 offset, CameraProperties cameraProperties)

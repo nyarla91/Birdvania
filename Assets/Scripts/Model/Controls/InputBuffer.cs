@@ -9,7 +9,7 @@ namespace Model.Controls
 {
     public class InputBuffer
     {
-        private Timer _timer;
+        private readonly Timer _timer;
         private float _timeWindow;
         
         public float TimeWindow

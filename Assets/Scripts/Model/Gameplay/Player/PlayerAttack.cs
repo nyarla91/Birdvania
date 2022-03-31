@@ -1,5 +1,4 @@
-﻿using System;
-using Model.Controls;
+﻿using Model.Controls;
 using Model.Gameplay.Entity;
 using NyarlaEssentials;
 using UnityEngine;
@@ -37,9 +36,15 @@ namespace Model.Gameplay.Player
 
         private void PerformAttack()
         {
-            if (Controls.InputScheme == InputScheme.KeyboardMouse)
-                Marker.RotateToDirection(Controls.AimDirection, Single.MaxValue);
-            
+            Vector3 lookDirection = Controls.InputScheme == InputScheme.KeyboardMouse
+                ? Controls.AimDirection
+                : Controls.WorldMoveDirection;
+
+            if (!lookDirection.Equals(Vector3.zero))
+            {
+                Marker.RotateToDirection(lookDirection);
+            }
+
             MeleeAttack.PerformAttack(0);
             _attackReady = false;
             _attackSeriesCooldownTimer.Restart();

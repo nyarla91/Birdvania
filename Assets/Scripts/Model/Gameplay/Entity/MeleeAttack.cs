@@ -15,16 +15,17 @@ namespace Model.Gameplay.Entity
         private Movable _movable;
         private Coroutine _attackCoroutine;
 
-        public StateMachine StateMachine => _stateMachine ??= GetComponent<StateMachine>();
-        public Movable Movable => _movable ??= GetComponent<Movable>();
+        private StateMachine StateMachine => _stateMachine ??= GetComponent<StateMachine>();
+        private Movable Movable => _movable ??= GetComponent<Movable>();
         
         public void PerformAttack(int attackIndex)
         {
             if (attackIndex >= _attacks.Count)
                 throw new Exception($"{gameObject.name} has no attack of index {attackIndex}");
 
-            if (!StateMachine.TrySwitchToState("Attack"))
+            if (!StateMachine.TryEnterState("Attack"))
                 return;
+            
             _attackCoroutine = StartCoroutine(PerformingAttack(_attacks[attackIndex]));
         }
 
@@ -35,10 +36,9 @@ namespace Model.Gameplay.Entity
             List<Hitbox> targets = performedAttack.Area.Targets;
             foreach (var target in targets)
             {
-                Vector3 pushForce = target.transform.position - transform.position;
-                pushForce *= performedAttack.TargetPushForce;
-                pushForce = pushForce.WithY(0).normalized;
-                target.TakeHit(performedAttack.Damage, performedAttack.StunTime, pushForce);
+                Vector3 directionFrom = transform.forward;
+                target.TakeHit(performedAttack.Damage, performedAttack.StaggerTime, DisorientationType.Stagger,
+                    directionFrom, performedAttack.TargetPushForce);
             }
             Movable?.SetForce(performedAttack.AttackerPushForce * transform.forward, false);
             
@@ -48,12 +48,9 @@ namespace Model.Gameplay.Entity
 
         private void StopAttack()
         {
-            if (!StateMachine.IsCurrentState(StateMachine.Attack))
-                return;
-            
-            StopCoroutine(_attackCoroutine);
+            _attackCoroutine?.Stop(this);
             _attackCoroutine = null;
-            StateMachine.TrySwitchToState(StateMachine.Regular);
+            StateMachine.TryExitState(StateMachine.Attack);
         }
 
         private void Start()
@@ -72,7 +69,7 @@ namespace Model.Gameplay.Entity
         [SerializeField] private int _damage;
         [SerializeField] private float _attackerPushForce;
         [SerializeField] private float _targetPushForce;
-        [SerializeField] private float _stunTime;
+        [SerializeField] private float _staggerTime;
         [SerializeField] private MeleeAttackArea area;
 
         public float SwingDuration => _swingDuration;
@@ -80,7 +77,7 @@ namespace Model.Gameplay.Entity
         public int Damage => _damage;
         public float AttackerPushForce => _attackerPushForce;
         public float TargetPushForce => _targetPushForce;
-        public float StunTime => _stunTime;
+        public float StaggerTime => _staggerTime;
         public MeleeAttackArea Area => area;
     }
 }

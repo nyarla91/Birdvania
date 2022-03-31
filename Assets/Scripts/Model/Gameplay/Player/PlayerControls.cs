@@ -14,8 +14,8 @@ namespace Model.Gameplay.Player
         private Vector3 _cameraForward;
         private Vector3 _cameraRight;
 
-        public Vector2 ScreenMoveVector => _controls.General.Move.ReadValue<Vector2>();
-        public Vector3 WorldMoveVector => _cameraForward * ScreenMoveVector.y + _cameraRight * ScreenMoveVector.x;
+        private Vector2 ScreenMoveDirection => _controls.General.Move.ReadValue<Vector2>();
+        public Vector3 WorldMoveDirection => _cameraForward * ScreenMoveDirection.y + _cameraRight * ScreenMoveDirection.x;
         public Vector3 AimDirection
         {
             get

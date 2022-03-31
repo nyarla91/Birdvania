@@ -41,7 +41,7 @@ namespace Model.Gameplay.Player
 
         private void ShootButtonReleased(InputAction.CallbackContext context)
         {
-            _chargingCoroutine?.StopThisCoroutine(this);
+            _chargingCoroutine?.Stop(this);
             _chargingCoroutine = null;
             OnPowerShotStopped?.Invoke();
 
@@ -69,14 +69,10 @@ namespace Model.Gameplay.Player
 
         private void PerformShot(Vector3 direction)
         {
-            if (Aim.HitscanReuslt.collider == null)
+            if (Aim.HitscanReuslt.collider == null || !Aim.HitscanReuslt.collider.TryGetComponent(out Hitbox target))
                 return;
             
-            if (Aim.HitscanReuslt.collider.TryGetComponent(out Hitbox target))
-            {
-                print($"{Aim.HitscanReuslt.collider} {Aim.HitscanReuslt.distance}");
-                target.TakeHit(_shotDamage, 0.2f, direction * _shotPushForce);
-            }
+            target.TakeHit(_shotDamage, 0.2f, DisorientationType.Stun, direction, _shotPushForce);
         }
 
         private void PerformPowerShot()

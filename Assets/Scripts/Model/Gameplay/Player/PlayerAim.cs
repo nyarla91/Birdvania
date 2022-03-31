@@ -1,5 +1,4 @@
 ﻿using System;
-using Model.Controls;
 using Model.Gameplay.Entity;
 using Presenter.Gameplay.Player;
 using UnityEngine;
@@ -18,8 +17,8 @@ namespace Model.Gameplay.Player
 
         private Coroutine _aimingCoroutine;
         private State _aimState;
-        private InputBuffer _aimBuffer;
         private RaycastHit _hitscanReuslt;
+        private bool _aimHold;
 
         public RaycastHit HitscanReuslt => _hitscanReuslt;
 
@@ -30,51 +29,38 @@ namespace Model.Gameplay.Player
         private void Construct(GameplayControls controls)
         {
             _controls = controls;
-            _aimBuffer = new InputBuffer(this, 1);
             _controls.General.Aim.started += AimPressed;
             _controls.General.Aim.canceled += AimReleased;
         }
 
-        private void AimPressed(InputAction.CallbackContext context)
-        {
-            _aimBuffer.SendInput();
-        }
+        private void AimPressed(InputAction.CallbackContext context) => _aimHold = true;
 
-        private void AimReleased(InputAction.CallbackContext context)
-        {
-            _aimBuffer.InterruptBuffering();
-            StateMachine.TryExitState(AimingState);
-        }
+        private void AimReleased(InputAction.CallbackContext context) => _aimHold = false;
 
         private void StartAim()
         {
-            if (StateMachine.TrySwitchToState(AimingState))
-            {
-                OnStartAim?.Invoke();
-                _controls.Regular.Disable();
-                _controls.Aim.Enable();
-            }
+            OnStartAim?.Invoke();
         }
 
         private void EndAim()
         {
             OnEndAim?.Invoke();
-            _controls.Aim.Disable();
-            _controls.Regular.Enable();
         }
 
         private void Start()
         {
             _line.Init(this, Gun, Controls);
             _aimState = StateMachine.GetState(AimingState);
-            _aimBuffer.OnPerformed += StartAim;
+            _aimState.OnEnter += StartAim;
             _aimState.OnExit += EndAim;
         }
 
         private void Update()
         {
-            if (_aimBuffer != null)
-                _aimBuffer.PerformAllowed = StateMachine.CurrentState.CanSwitchToState(AimingState);
+            if (_aimHold)
+                StateMachine.TryEnterState(AimingState);
+            else
+                StateMachine.TryExitState(AimingState);
 
             if (StateMachine.IsCurrentState(AimingState))
             {
@@ -87,7 +73,6 @@ namespace Model.Gameplay.Player
         {
             LayerMask layerMask = LayerMask.GetMask(new[] {"Enemy", "Destructable", "Wall", "Floor"});
             Ray ray = new Ray(transform.position + new Vector3(0, 0.5f, 0), Controls.AimDirection);
-
             Physics.Raycast(ray, out _hitscanReuslt, 50, layerMask, QueryTriggerInteraction.Collide);
         }
     }

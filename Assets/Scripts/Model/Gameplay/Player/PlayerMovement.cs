@@ -35,7 +35,7 @@ namespace Model.Gameplay.Player
         private bool _glidingHold;
 
         private Movable _movable;
-        public Movable Movable => _movable ??= GetComponent<Movable>();
+        private Movable Movable => _movable ??= GetComponent<Movable>();
 
         [Inject]
         private void Construct(GameplayControls controls)
@@ -55,10 +55,10 @@ namespace Model.Gameplay.Player
 
         private void StartRoll()
         {
-            if (!StateMachine.TrySwitchToState(RollState))
+            if (!StateMachine.TryEnterState(RollState))
                 return;
             
-            Vector3 direction = Controls.WorldMoveVector;
+            Vector3 direction = Controls.WorldMoveDirection;
             if (direction.Equals(Vector3.zero))
                 direction = transform.forward;
                 
@@ -68,7 +68,6 @@ namespace Model.Gameplay.Player
 
         private IEnumerator Roll(Vector3 direction)
         {
-            gameObject.layer = 11;
             _rollReady = false;
             _rollCooldownTimer.Restart();
             for (float i = 0; i < _rollDuration; i += Time.fixedDeltaTime)
@@ -82,8 +81,7 @@ namespace Model.Gameplay.Player
 
         private void ExitRoll()
         {
-            gameObject.layer = 6;
-            StopCoroutine(_rollCoroutine);
+            _rollCoroutine?.Stop(this);
             _rollCoroutine = null;
         }
 
@@ -92,11 +90,10 @@ namespace Model.Gameplay.Player
             StateMachine.GetState(RollState).OnExit += ExitRoll;
             _rollCooldownTimer = new Timer(this, _rollCooldown);
             _rollCooldownTimer.OnExpired += () => _rollReady = true;
-            Movable.OnFallStart += () => StateMachine.TrySwitchToState(FallState);
+            Movable.OnFallStart += () => StateMachine.TryEnterState(FallState);
             Movable.OnGrounded += () =>
             {
-                if (StateMachine.IsCurrentState(FallState))
-                    StateMachine.TrySwitchToState(StateMachine.Regular);
+                StateMachine.TryExitState(FallState);
             };
         }
 
@@ -108,7 +105,7 @@ namespace Model.Gameplay.Player
 
         private void FixedUpdate()
         {
-            Walk(Controls.WorldMoveVector);
+            Walk(Controls.WorldMoveDirection);
         }
 
         private void Walk(Vector3 direction)

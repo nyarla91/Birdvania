@@ -17,13 +17,13 @@ namespace NyarlaEssentials
             GameObject.Destroy(gameObject);
         }
 
-        public static void StopThisCoroutine(this Coroutine coroutine, MonoBehaviour container, ref Coroutine fieldToClear)
+        public static void Stop(this Coroutine coroutine, MonoBehaviour container, ref Coroutine fieldToClear)
         {
-            coroutine.StopThisCoroutine(container);
+            coroutine.Stop(container);
             fieldToClear = null;
         }
 
-        public static void StopThisCoroutine(this Coroutine coroutine, MonoBehaviour container)
+        public static void Stop(this Coroutine coroutine, MonoBehaviour container)
         {
             container.StopCoroutine(coroutine);
         }

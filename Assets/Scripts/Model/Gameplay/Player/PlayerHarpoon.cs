@@ -38,7 +38,7 @@ namespace Model.Gameplay.Player
 
         private void HarpoonButtonPressed(InputAction.CallbackContext context)
         {
-            if (StateMachine.TrySwitchToState(HarpoonState))
+            if (StateMachine.TryEnterState(HarpoonState))
             {
                 _shootCoroutine = StartCoroutine(Shoot());
             }
@@ -46,7 +46,6 @@ namespace Model.Gameplay.Player
 
         private void CancelHatpoonButtonPressed(InputAction.CallbackContext context)
         {
-            print(StateMachine.CurrentState.Name);
             if (StateMachine.IsCurrentState(HarpoonState))
             {
                 EndShoot();
@@ -58,16 +57,19 @@ namespace Model.Gameplay.Player
             if (!_harpoonProjectile.Equals(null))
                 _harpoonProjectile.gameObject.SelfDestruct();
             _harpoonProjectile = null;
-            _pulledHitbox?.StateMachine.TryExitState(HarpoonState);
+
+            _pulledHitbox?.StateMachine?.TryExitState(HarpoonState);
             _pulledHitbox = null;
-            _shootCoroutine?.StopThisCoroutine(this, ref _shootCoroutine);
-            _pullCoroutine?.StopThisCoroutine(this, ref _pullCoroutine);
+            
+            _shootCoroutine?.Stop(this, ref _shootCoroutine);
+            _pullCoroutine?.Stop(this, ref _pullCoroutine);
+            
             StateMachine.TryExitState(HarpoonState);
         }
 
         private IEnumerator Shoot()
         {
-            StateMachine.TrySwitchToState(HarpoonState);
+            StateMachine.TryEnterState(HarpoonState);
             
             _harpoonProjectile = InstantiateForComponent<Projectile>(_harpoonPrefab, transform.position);
             _harpoonProjectile.Init(Controls.AimDirection);
@@ -87,6 +89,8 @@ namespace Model.Gameplay.Player
                 EndShoot();
                 yield break;
             }
+            
+            _pulledHitbox.StateMachine?.TryEnterState(HarpoonState);
             Movable targetMovable = _pulledHitbox.Movable;
             switch (_pulledHitbox.HarpoonPullMode)
             {
@@ -110,14 +114,9 @@ namespace Model.Gameplay.Player
         {
             while (Vector3.Distance(target.transform.position, destination.position) > _pullStopDistance)
             {
-                Vector3 velocity = (destination.position - target.transform.position).normalized * _pullSpeed * Time.fixedDeltaTime;
-                Vector3 originPosition = target.transform.position;
-                
+                Vector3 direction = (destination.position - target.transform.position).WithY(0.01f).normalized;
+                Vector3 velocity = direction * _pullSpeed * Time.fixedDeltaTime;
                 target.Move(velocity, false, false);
-                float deltaDistance = Vector3.Distance(originPosition, target.transform.position);
-                
-                if (deltaDistance + 999 < velocity.magnitude * _minDelta)
-                    break;
                 yield return new WaitForFixedUpdate();
             }
         }

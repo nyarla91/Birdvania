@@ -26,6 +26,7 @@ namespace View.Gameplay.Player
         public void GetThin() => _mesh.localScale = new Vector3(_regularScale, _regularScale, _mesh.localScale.z);
 
         public void Show() => _mesh.gameObject.SetActive(true);
+
         public void Hide() => _mesh.gameObject.SetActive(false);
 
         private void Start()
